@@ -18,7 +18,7 @@ mvn source:jar install
 <dependency>
     <groupId>com.cl3t4p</groupId>
     <artifactId>command-api</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ```
 
