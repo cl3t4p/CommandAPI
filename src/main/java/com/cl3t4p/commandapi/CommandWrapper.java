@@ -1,6 +1,5 @@
 package com.cl3t4p.commandapi;
 
-
 import com.cl3t4p.commandapi.annotation.Msg;
 import com.cl3t4p.commandapi.annotation.CommandInfo;
 import com.cl3t4p.commandapi.annotation.CommandPermission;
@@ -16,11 +15,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-
 /**
  * This class is used to wrap a method as a command.
+ *
  * @author cl3t4p
+ *
  * @version 0.3
+ *
  * @since 0.2
  */
 @Getter
@@ -36,10 +37,16 @@ public class CommandWrapper {
 
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
-     * @param method The method to get the annotation from.
-     * @param object The object that contains the method.
-     * @param manager The {@link CommandManager} that will manage the command.
-     * @throws CommandException If the method is not valid to be a command.
+     *
+     * @param method
+     *            The method to get the annotation from.
+     * @param object
+     *            The object that contains the method.
+     * @param manager
+     *            The {@link CommandManager} that will manage the command.
+     *
+     * @throws CommandException
+     *             If the method is not valid to be a command.
      */
     public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandException {
         CommandInfo info = getInfo(method);
@@ -68,7 +75,10 @@ public class CommandWrapper {
 
     /**
      * This method is used to get the {@link CommandPermission} annotation of a method.
-     * @param method The method to get the annotation from.
+     *
+     * @param method
+     *            The method to get the annotation from.
+     *
      * @return The permission of the command.
      */
     private String getPermission(Method method) {
@@ -82,9 +92,14 @@ public class CommandWrapper {
 
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
-     * @param method The method to get the annotation from.
+     *
+     * @param method
+     *            The method to get the annotation from.
+     *
      * @return The {@link CommandInfo} annotation of the method.
-     * @throws CommandException If the method is not valid to be a command.
+     *
+     * @throws CommandException
+     *             If the method is not valid to be a command.
      */
     private CommandInfo getInfo(Method method) throws CommandException {
         CommandInfo info = method.getDeclaredAnnotation(CommandInfo.class);
@@ -95,7 +110,7 @@ public class CommandWrapper {
             throw new CommandException("The first arguments does not implements CommandSender");
         }
         for (Class<?> parameterType : method.getParameterTypes()) {
-            if(!manager.parsers.containsKey(parameterType))
+            if (!manager.parsers.containsKey(parameterType))
                 throw new CommandException("The parser does not have a parser for " + parameterType.getTypeName());
         }
         return info;
@@ -103,8 +118,11 @@ public class CommandWrapper {
 
     /**
      * This method is used to execute the command.
-     * @param sender The sender of the command.
-     * @param args The arguments of the command.
+     *
+     * @param sender
+     *            The sender of the command.
+     * @param args
+     *            The arguments of the command.
      */
     public void onCommand(CommandSender sender, String[] args) {
         if (!argumentsType[0].isInstance(sender)) {
@@ -125,7 +143,7 @@ public class CommandWrapper {
                 break;
 
             try {
-                Parser.Response<?> response = manager.parse(argumentsType[i+1],args,i);
+                Parser.Response<?> response = manager.parse(argumentsType[i + 1], args, i);
                 i = response.getIndex();
                 arguments[i + 1] = response.getObject();
             } catch (IllegalArgumentException e) {

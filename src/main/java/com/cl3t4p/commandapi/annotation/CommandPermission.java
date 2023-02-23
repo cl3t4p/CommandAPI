@@ -7,8 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * Used to specify the permission required to execute a command.
+ *
  * @author cl3t4p
+ *
  * @version 0.3
+ *
  * @since 0.2
  */
 @Target(ElementType.METHOD)

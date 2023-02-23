@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
  * Used to get the {@link CommandMap} from the server.
  *
  * @author cl3t4p
+ *
  * @version 0.3
+ *
  * @since 0.2
  */
 public class CommandMapWrapper {
@@ -30,6 +32,7 @@ public class CommandMapWrapper {
 
     /**
      * Get the command map from the server using reflection.
+     *
      * @return The command map
      */
     public CommandMap getCommandMap() {

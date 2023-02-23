@@ -1,6 +1,5 @@
 package com.cl3t4p.commandapi.parser;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -8,23 +7,22 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.UUID;
 
-
 /**
  * This class is used to parse a string to a specific type.
  *
  * @author cl3t4p
+ *
  * @version 0.3
+ *
  * @since 0.2
  */
 public abstract class Parser<U> {
-
 
     public static final Parser<Player> PLAYER = new Parser<>() {
         @Override
         public String getMessage(int index) {
             return "Player not found or not online at index " + index;
         }
-
 
         @Override
         public Response<Player> parse(String[] string, int index) throws IllegalArgumentException {
@@ -121,7 +119,6 @@ public abstract class Parser<U> {
             }
         }
 
-
     };
     public static final Parser<String[]> STRING_ARRAY = new Parser<>() {
         @Override
@@ -169,14 +166,16 @@ public abstract class Parser<U> {
         map.put(Float.class, FLOAT);
         map.put(java.net.URL.class, URL);
         map.put(Vector.class, VECTOR);
-        map.put(String[].class,STRING_ARRAY);
+        map.put(String[].class, STRING_ARRAY);
         return map;
     }
 
     /**
      * Message to be sent when the parser fails.
      *
-     * @param index index of the string that failed to parse.
+     * @param index
+     *            index of the string that failed to parse.
+     *
      * @return the message to be sent.
      */
     public abstract String getMessage(int index);

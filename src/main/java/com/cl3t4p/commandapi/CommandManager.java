@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
  * This class is used to create and manage commands.
  *
  * @author cl3t4p
+ *
  * @version 0.3
+ *
  * @since 0.2
  */
 public class CommandManager {
@@ -42,12 +44,14 @@ public class CommandManager {
     }
 
     protected Parser.Response<?> parse(Class<?> type, String[] args, int index) throws IllegalArgumentException {
-        return parsers.get(type).parse(args,index);
+        return parsers.get(type).parse(args, index);
     }
 
     /**
      * Register the method of a command object.
-     * @param command The command object.
+     *
+     * @param command
+     *            The command object.
      */
     public void add(Command command) {
         Set<CommandWrapper> cmds = Arrays.stream(command.getClass().getDeclaredMethods())
@@ -72,14 +76,16 @@ public class CommandManager {
 
     /**
      * Add a parser to the manager.
-     * @param clazz The class of the object to parse.
-     * @param parser The parser.
-     * @param <T> The type of the object to parse.
+     *
+     * @param clazz
+     *            The class of the object to parse.
+     * @param parser
+     *            The parser.
+     * @param <T>
+     *            The type of the object to parse.
      */
     public <T> void addParser(Class<T> clazz, Parser<T> parser) {
         parsers.put(clazz, parser);
     }
-
-
 
 }
