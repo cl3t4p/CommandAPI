@@ -1,8 +1,10 @@
 package com.cl3t4p.commandapi;
 
-import com.cl3t4p.commandapi.CommandManager;
+
+import com.cl3t4p.commandapi.annotation.Msg;
 import com.cl3t4p.commandapi.annotation.CommandInfo;
 import com.cl3t4p.commandapi.annotation.CommandPermission;
+import com.cl3t4p.commandapi.exception.CommandCreationException;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,6 +15,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+
+/**
+ * This class is used to wrap a method as a command.
+ * @author cl3t4p
+ * @version 0.2
+ * @since 0.2
+ */
 @Getter
 public class CommandWrapper {
 
@@ -24,14 +33,15 @@ public class CommandWrapper {
     final CommandManager manager;
     final Class<?>[] argumentsType;
 
-    public CommandWrapper(Method method, Object object, CommandManager manager) throws Exception {
-        CommandInfo info = method.getDeclaredAnnotation(CommandInfo.class);
-        if (info == null) {
-            throw new Exception("Method need to contain @CommandInfo");
-        }
-        if (!CommandSender.class.isAssignableFrom(method.getParameterTypes()[0])) {
-            throw new Exception("Method first arguments does not impements CommandSender");
-        }
+    /**
+     * This method is used to get the {@link CommandInfo} annotation of a method.
+     * @param method The method to get the annotation from.
+     * @param object The object that contains the method.
+     * @param manager The {@link CommandManager} that will manage the command.
+     * @throws CommandCreationException If the method is not valid to be a command.
+     */
+    public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandCreationException {
+        CommandInfo info = getInfo(method);
         this.argumentsType = method.getParameterTypes();
         this.method = method;
         this.required = info.required();
@@ -48,26 +58,56 @@ public class CommandWrapper {
             }
         };
 
-        CommandPermission perm = method.getDeclaredAnnotation(CommandPermission.class);
-        if (perm != null) {
-            permission = perm.value();
-            command.setPermission(permission);
-        } else
-            permission = "";
+        permission = getPermission(method);
 
         if (info.alias().length != 0) {
             command.setAliases(Arrays.asList(info.alias()));
         }
     }
 
+    /**
+     * This method is used to get the {@link CommandPermission} annotation of a method.
+     * @param method The method to get the annotation from.
+     * @return The permission of the command.
+     */
+    private String getPermission(Method method) {
+        CommandPermission perm = method.getDeclaredAnnotation(CommandPermission.class);
+        if (perm != null) {
+            command.setPermission(permission);
+            return perm.value();
+        }
+        return "";
+    }
+
+    /**
+     * This method is used to get the {@link CommandInfo} annotation of a method.
+     * @param method The method to get the annotation from.
+     * @return The {@link CommandInfo} annotation of the method.
+     * @throws CommandCreationException If the method is not valid to be a command.
+     */
+    private CommandInfo getInfo(Method method) throws CommandCreationException {
+        CommandInfo info = method.getDeclaredAnnotation(CommandInfo.class);
+        if (info == null) {
+            throw new CommandCreationException("Method need to contain @CommandInfo");
+        }
+        if (!CommandSender.class.isAssignableFrom(method.getParameterTypes()[0])) {
+            throw new CommandCreationException("The first arguments does not implements CommandSender");
+        }
+        return info;
+    }
+
+    /**
+     * This method is used to execute the command.
+     * @param sender The sender of the command.
+     * @param args The arguments of the command.
+     */
     public void onCommand(CommandSender sender, String[] args) {
         if (!argumentsType[0].isInstance(sender)) {
-            sender.sendMessage(
-                    color("&c> Only " + argumentsType[0].getTypeName() + " are allowed to do this command!"));
+            sender.sendMessage(color(String.format(manager.getWrong_type(), argumentsType[0].getTypeName())));
             return;
         }
         if (args.length < required) {
-            sender.sendMessage(color("&c> Not enough arguments!"));
+            sender.sendMessage(color(manager.getNot_enough()));
             return;
         }
 
@@ -76,16 +116,21 @@ public class CommandWrapper {
         arguments[0] = sender;
 
         for (int i = 0; i < method.getParameterCount() - 1; i++) {
-            if (args.length == i)
+            if (args.length <= i)
                 break;
+
             try {
                 arguments[i + 1] = manager.parse(argumentsType[i + 1], args[i]);
             } catch (IllegalArgumentException e) {
-                sender.sendMessage(
-                        color(String.format("&c> Wrong argument at position %d error : %s", i + 1, e.getMessage())));
+                Msg msg = method.getParameters()[i + 1].getDeclaredAnnotation(Msg.class);
+                if (msg == null)
+                    sender.sendMessage(color(String.format(manager.getWrong_arg(), i + 1, e.getMessage())));
+                else
+                    sender.sendMessage(color(msg.value()));
                 return;
             }
         }
+
         try {
             method.invoke(instance, arguments);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -93,6 +138,9 @@ public class CommandWrapper {
         }
     }
 
+    /**
+     * This method is used to translate color codes.
+     */
     protected String color(@NotNull String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }

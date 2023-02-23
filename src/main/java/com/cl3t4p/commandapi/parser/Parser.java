@@ -1,82 +1,105 @@
 package com.cl3t4p.commandapi.parser;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.UUID;
 
+
+/**
+ * This class is used to parse a string to a specific type.
+ * 
+ * @author cl3t4p
+ * @version 0.2
+ * @since 0.2
+ */
 public abstract class Parser<U> {
 
-    public static final Parser<Player> PLAYER = new Parser<>() {
+    @Getter
+    @Setter
+    private String message;
+
+    /**
+     * Parse a string to a specific type.
+     * @param message The message to return if the string cannot be parsed.
+     * @throws IllegalArgumentException If the string cannot be parsed will return message.
+     */
+    public Parser(String message) {
+        this.message = message;
+    }
+
+    public static final Parser<Player> PLAYER = new Parser<>("Player is not online") {
         @Override
         public Player parse(String string) throws IllegalArgumentException {
             Player player = Bukkit.getPlayer(string);
             if (player == null) {
-                throw new IllegalArgumentException("Player is not online");
+                throw new IllegalArgumentException(getMessage());
             }
             return player;
         }
     };
 
-    public static final Parser<UUID> UUID = new Parser<>() {
+    public static final Parser<UUID> UUID = new Parser<>("Invalid UUID") {
         @Override
         public java.util.UUID parse(String string) throws IllegalArgumentException {
             try {
                 return java.util.UUID.fromString(string);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid UUID");
+                throw new IllegalArgumentException(getMessage());
             }
         }
     };
 
-    public static final Parser<String> STRING = new Parser<>() {
+    public static final Parser<String> STRING = new Parser<>("") {
         @Override
         public String parse(String string) throws IllegalArgumentException {
             return string;
         }
     };
 
-    public static final Parser<Integer> INTEGER = new Parser<>() {
+    public static final Parser<Integer> INTEGER = new Parser<>("Invalid Integer") {
         @Override
         public Integer parse(String string) throws IllegalArgumentException {
             try {
                 return Integer.valueOf(string);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid Integer");
+                throw new IllegalArgumentException(getMessage());
             }
         }
     };
 
-    public static final Parser<Double> DOUBLE = new Parser<>() {
+    public static final Parser<Double> DOUBLE = new Parser<>("Invalid Double") {
         @Override
         public Double parse(String string) throws IllegalArgumentException {
             try {
                 return Double.valueOf(string);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid Double");
+                throw new IllegalArgumentException(getMessage());
             }
         }
     };
 
-    public static final Parser<Float> FLOAT = new Parser<>() {
+    public static final Parser<Float> FLOAT = new Parser<>("Invalid Float") {
         @Override
         public Float parse(String string) throws IllegalArgumentException {
             try {
                 return Float.valueOf(string);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid Float");
+                throw new IllegalArgumentException(getMessage());
             }
         }
     };
 
-    public static final Parser<java.net.URL> URL = new Parser<>() {
+    public static final Parser<java.net.URL> URL = new Parser<>("Invalid URL") {
         @Override
         public java.net.URL parse(String string) throws IllegalArgumentException {
             try {
                 return new java.net.URL(string);
             } catch (Exception e) {
-                throw new IllegalArgumentException("Invalid URL");
+                throw new IllegalArgumentException(getMessage());
             }
         }
     };

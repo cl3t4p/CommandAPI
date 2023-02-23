@@ -15,10 +15,8 @@ import java.util.stream.Collectors;
  * Used to get the {@link CommandMap} from the server.
  *
  * @author cl3t4p
- *
- * @version 1.0
- *
- * @since 1.0
+ * @version 0.2
+ * @since 0.2
  */
 public class CommandMapWrapper {
     CommandMap commandMap;
@@ -30,6 +28,10 @@ public class CommandMapWrapper {
         this.plugin = plugin;
     }
 
+    /**
+     * Get the command map from the server using reflection.
+     * @return The command map
+     */
     public CommandMap getCommandMap() {
         if (commandMap == null) {
             try {
@@ -64,6 +66,9 @@ public class CommandMapWrapper {
         commands.add(command);
     }
 
+    /**
+     * Unregister the command and the permission if it has one.
+     */
     public void unregister() {
         perms.forEach(p -> Bukkit.getPluginManager().removePermission(p));
     }

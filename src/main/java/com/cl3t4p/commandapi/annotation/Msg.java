@@ -5,11 +5,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
+
 /**
- * TODO Need Implementation
+ * Used to specify if the argument had an error during the parsing.
+ * @author cl3t4p
+ * @version 0.2
+ * @since 0.2
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Arg {
+public @interface Msg {
     String value();
 }
