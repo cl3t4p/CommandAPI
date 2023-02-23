@@ -35,7 +35,7 @@ mvn source:jar install
 ### Annotation
 
 `@CommandInfo`
-This annotation can be used witouth any arguments This annotation is used to check if a method is a command
+This annotation can be used without any arguments This annotation is used to check if a method is a command
 - `name`: the name of the command. If not specified, the method name is used.
 - `required`: the minimum number of arguments required for the command.
 - `alias`: an array of alternative names for the command.
