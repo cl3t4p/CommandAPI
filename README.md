@@ -50,7 +50,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 
-// Check if the args is a player name and if the player is online
+
 public class ExampleCommand implements Command {
 
     
