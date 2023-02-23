@@ -65,4 +65,13 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub cl3t4p Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/cl3t4p/CommandAPI</url>
+        </repository>
+    </distributionManagement>
+
 </project>
