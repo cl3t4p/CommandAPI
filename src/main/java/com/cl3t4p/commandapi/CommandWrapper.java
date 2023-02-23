@@ -110,7 +110,7 @@ public class CommandWrapper {
             throw new CommandException("The first arguments does not implements CommandSender");
         }
         for (Class<?> parameterType : method.getParameterTypes()) {
-            if (!manager.parsers.containsKey(parameterType))
+            if (!manager.getParsers().containsKey(parameterType))
                 throw new CommandException("The parser does not have a parser for " + parameterType.getTypeName());
         }
         return info;

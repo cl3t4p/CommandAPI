@@ -37,6 +37,7 @@ public class CommandManager {
     @Getter
     final Set<CommandWrapper> commands = new HashSet<>();
 
+    @Getter
     final HashMap<Class<?>, Parser<?>> parsers = Parser.newMap();
 
     public CommandManager(Plugin plugin) {
