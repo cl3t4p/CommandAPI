@@ -14,13 +14,23 @@ cd CommandAPI
 mvn source:jar install
 ```
 
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
 ```xml  
 <dependency>
-    <groupId>com.cl3t4p</groupId>
-    <artifactId>command-api</artifactId>
+    <groupId>com.github.cl3t4p</groupId>
+    <artifactId>CommandAPI</artifactId>
     <version>0.2</version>
 </dependency>
 ```
+[![](https://jitpack.io/v/cl3t4p/CommandAPI.svg)](https://jitpack.io/#cl3t4p/CommandAPI)
 
 ### Annotation
 
