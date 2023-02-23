@@ -46,8 +46,9 @@ public class ExampleCommand implements Command {
     
     // Specifies that this method is a command handler for the "/teleport" command, 
     // with aliases "/tp" and "/tpt".
-    // Requires the sender to provide 1 arguments (the target's name).
+    // Requires the sender to provide 1 argument (the target's name).
     // Requires the sender to have the "example.teleport" permission to use this command.
+    // The library will check if the sender is a player and if the target is online.
     @CommandInfo(name = "teleport", required = 1, alias = {"tp", "tpt"})
     @CommandPermission("example.teleport")
     public teleport(Player player, Player target) {
@@ -68,13 +69,22 @@ import com.cl3t4p.commandapi.CommandMapWrapper;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExamplePlugin extends JavaPlugin {
+    
+    CommandManager cmdManager;
 
     @Override
     public void onEnable() {
-        CommandManager cmdManager = new CommandManager(this);
+        cmdManager = new CommandManager(this);
 
         // Register the command
         cmdManager.add(new ExampleCommand());
+    }
+
+    @Override
+    public void onDisable() {
+        
+        // Unregister the commands
+        cmdManager.unregister();
     }
 }
 ```
