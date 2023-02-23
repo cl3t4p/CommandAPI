@@ -6,8 +6,8 @@ package com.cl3t4p.commandapi.exception;
  * @version 0.2
  * @since 0.2
  */
-public class CommandCreationException extends Exception {
-    public CommandCreationException(String message) {
+public class CommandException extends Exception {
+    public CommandException(String message) {
         super(message);
     }
 }

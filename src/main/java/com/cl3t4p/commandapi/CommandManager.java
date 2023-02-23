@@ -1,6 +1,7 @@
 package com.cl3t4p.commandapi;
 
 import com.cl3t4p.commandapi.annotation.CommandInfo;
+import com.cl3t4p.commandapi.exception.CommandException;
 import com.cl3t4p.commandapi.parser.Parser;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,9 +31,6 @@ public class CommandManager {
     String not_enough = "&c> Not enough arguments!";
     @Getter
     @Setter
-    String wrong_arg = "&c> Wrong argument at position %d error : %s";
-    @Getter
-    @Setter
     String wrong_type = "&c> Only %s are allowed to do this command!";
 
     @Getter
@@ -44,8 +42,8 @@ public class CommandManager {
         this.manager = new CommandMapWrapper(plugin);
     }
 
-    protected Object parse(Class<?> type, String arg) throws IllegalArgumentException {
-        return parsers.get(type).parse(arg);
+    protected Object parse(Class<?> type, String[] args,int index) throws IllegalArgumentException {
+        return parsers.get(type).parse(args,index);
     }
 
     /**

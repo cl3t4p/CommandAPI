@@ -4,7 +4,8 @@ package com.cl3t4p.commandapi;
 import com.cl3t4p.commandapi.annotation.Msg;
 import com.cl3t4p.commandapi.annotation.CommandInfo;
 import com.cl3t4p.commandapi.annotation.CommandPermission;
-import com.cl3t4p.commandapi.exception.CommandCreationException;
+import com.cl3t4p.commandapi.exception.CommandException;
+import com.cl3t4p.commandapi.parser.Parser;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,9 +39,9 @@ public class CommandWrapper {
      * @param method The method to get the annotation from.
      * @param object The object that contains the method.
      * @param manager The {@link CommandManager} that will manage the command.
-     * @throws CommandCreationException If the method is not valid to be a command.
+     * @throws CommandException If the method is not valid to be a command.
      */
-    public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandCreationException {
+    public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandException {
         CommandInfo info = getInfo(method);
         this.argumentsType = method.getParameterTypes();
         this.method = method;
@@ -83,15 +84,19 @@ public class CommandWrapper {
      * This method is used to get the {@link CommandInfo} annotation of a method.
      * @param method The method to get the annotation from.
      * @return The {@link CommandInfo} annotation of the method.
-     * @throws CommandCreationException If the method is not valid to be a command.
+     * @throws CommandException If the method is not valid to be a command.
      */
-    private CommandInfo getInfo(Method method) throws CommandCreationException {
+    private CommandInfo getInfo(Method method) throws CommandException {
         CommandInfo info = method.getDeclaredAnnotation(CommandInfo.class);
         if (info == null) {
-            throw new CommandCreationException("Method need to contain @CommandInfo");
+            throw new CommandException("Method need to contain @CommandInfo");
         }
         if (!CommandSender.class.isAssignableFrom(method.getParameterTypes()[0])) {
-            throw new CommandCreationException("The first arguments does not implements CommandSender");
+            throw new CommandException("The first arguments does not implements CommandSender");
+        }
+        for (Class<?> parameterType : method.getParameterTypes()) {
+            if(!manager.parsers.containsKey(parameterType))
+                throw new CommandException("The parser does not have a parser for " + parameterType.getTypeName());
         }
         return info;
     }
@@ -120,11 +125,11 @@ public class CommandWrapper {
                 break;
 
             try {
-                arguments[i + 1] = manager.parse(argumentsType[i + 1], args[i]);
+                arguments[i + 1] = manager.parse(argumentsType[i + 1], args,i);
             } catch (IllegalArgumentException e) {
                 Msg msg = method.getParameters()[i + 1].getDeclaredAnnotation(Msg.class);
                 if (msg == null)
-                    sender.sendMessage(color(String.format(manager.getWrong_arg(), i + 1, e.getMessage())));
+                    sender.sendMessage(color(String.format(e.getMessage(), i + 1, e.getMessage())));
                 else
                     sender.sendMessage(color(msg.value()));
                 return;
