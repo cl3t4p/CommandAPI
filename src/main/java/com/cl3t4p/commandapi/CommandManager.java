@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * This class is used to create and manage commands.
  *
  * @author cl3t4p
- * @version 0.2
+ * @version 0.3
  * @since 0.2
  */
 public class CommandManager {

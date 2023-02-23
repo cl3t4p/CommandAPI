@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * Used to specify if the argument had an error during the parsing.
  * @author cl3t4p
- * @version 0.2
+ * @version 0.3
  * @since 0.2
  */
 @Target(ElementType.PARAMETER)

@@ -27,7 +27,7 @@ mvn source:jar install
 <dependency>
     <groupId>com.github.cl3t4p</groupId>
     <artifactId>CommandAPI</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ```
 [![](https://jitpack.io/v/cl3t4p/CommandAPI.svg)](https://jitpack.io/#cl3t4p/CommandAPI)

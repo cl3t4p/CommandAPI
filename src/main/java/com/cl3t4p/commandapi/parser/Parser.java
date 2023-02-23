@@ -13,7 +13,7 @@ import java.util.UUID;
  * This class is used to parse a string to a specific type.
  *
  * @author cl3t4p
- * @version 0.2
+ * @version 0.3
  * @since 0.2
  */
 public abstract class Parser<U> {

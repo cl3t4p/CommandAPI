@@ -20,7 +20,7 @@ import java.util.Arrays;
 /**
  * This class is used to wrap a method as a command.
  * @author cl3t4p
- * @version 0.2
+ * @version 0.3
  * @since 0.2
  */
 @Getter
