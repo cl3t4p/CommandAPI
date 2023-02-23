@@ -125,7 +125,9 @@ public class CommandWrapper {
                 break;
 
             try {
-                arguments[i + 1] = manager.parse(argumentsType[i + 1], args,i);
+                Parser.Response<?> response = manager.parse(argumentsType[i+1],args,i);
+                i = response.getIndex();
+                arguments[i + 1] = response.getObject();
             } catch (IllegalArgumentException e) {
                 Msg msg = method.getParameters()[i + 1].getDeclaredAnnotation(Msg.class);
                 if (msg == null)
