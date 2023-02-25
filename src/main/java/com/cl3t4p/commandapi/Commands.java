@@ -9,6 +9,6 @@ package com.cl3t4p.commandapi;
  *
  * @since 0.2
  */
-public interface Command {
+public interface Commands {
 
 }

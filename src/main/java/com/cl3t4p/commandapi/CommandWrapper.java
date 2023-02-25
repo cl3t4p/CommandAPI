@@ -71,6 +71,16 @@ public class CommandWrapper {
         if (info.alias().length != 0) {
             command.setAliases(Arrays.asList(info.alias()));
         }
+
+        setSubCommand(name);
+    }
+
+    private void setSubCommand(String name) {
+        if(name.contains("\\t")){
+            String[] array = name.split("\\t");
+
+            manager.addMainCommand(Arrays.copyOf(array, array.length-1),command);
+        }
     }
 
     /**
@@ -110,7 +120,7 @@ public class CommandWrapper {
             throw new CommandException("The first arguments does not implements CommandSender");
         }
         for (Class<?> parameterType : method.getParameterTypes()) {
-            if (!manager.getParsers().containsKey(parameterType))
+            if (!CommandManager.PARSER.containsKey(parameterType))
                 throw new CommandException("The parser does not have a parser for " + parameterType.getTypeName());
         }
         return info;

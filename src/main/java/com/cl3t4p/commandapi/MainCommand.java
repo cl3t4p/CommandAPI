@@ -9,9 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class MainCommand extends Command {
+/**
+ * This class is used to create a main command.
+ *
+ * @author cl3t4p
+ *
+ * @version 0.3
+ *
+ * @since 0.2
+ **/
+public class MainCommand extends Command {
 
-    HashMap<String,Command> commands = new HashMap<>();
+    private final HashMap<String,Command> commands = new HashMap<>();
     public MainCommand(@NotNull String name,String permission) {
         super(name);
         if(!permission.isEmpty())
@@ -25,7 +34,9 @@ public abstract class MainCommand extends Command {
         addCommand(command.getCommand());
     }
 
-    public abstract String getHelpMessage();
+    public String getHelpMessage(){
+        return  "&c> Please select a option";
+    }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
@@ -58,10 +69,8 @@ public abstract class MainCommand extends Command {
     }
 
     private String[] removeFirstArray(String[] array){
-        int index = 1;
-        String[] returnArray = new String[array.length - index];
-        if (array.length - index >= 0)
-            System.arraycopy(array, index, returnArray, 0, array.length - index);
+        String[] returnArray = new String[array.length - 1];
+        System.arraycopy(array, 1, returnArray, 0, array.length - 1);
         return returnArray;
     }
 }
