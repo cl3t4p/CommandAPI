@@ -34,6 +34,7 @@ public class CommandWrapper {
     final Object instance;
     final CommandManager manager;
     final Class<?>[] argumentsType;
+    final boolean isSuperCommand;
 
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
@@ -72,15 +73,16 @@ public class CommandWrapper {
             command.setAliases(Arrays.asList(info.alias()));
         }
 
-        setSubCommand(name);
+        this.isSuperCommand = setSuperCommand(name);
     }
 
-    private void setSubCommand(String name) {
-        if(name.contains("\\t")){
+    private boolean setSuperCommand(String name) {
+        if (name.contains("\\t")) {
             String[] array = name.split("\\t");
-
-            manager.addMainCommand(Arrays.copyOf(array, array.length-1),command);
+            manager.addMainCommand(Arrays.copyOf(array, array.length - 1), command);
+            return false;
         }
+        return true;
     }
 
     /**
