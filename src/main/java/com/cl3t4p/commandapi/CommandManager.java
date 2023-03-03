@@ -94,7 +94,7 @@ public class CommandManager {
         String name = mainNames[mainNames.length - 1].toLowerCase();
         MainCommand mainCommand;
         if (!mainCommands.containsKey(name)) {
-            // TODO figure out permissions
+            // TODO permissions
             mainCommand = new MainCommand(name, "", this);
             mainCommands.put(name, mainCommand);
         } else {

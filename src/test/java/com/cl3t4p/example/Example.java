@@ -9,7 +9,7 @@ public class Example implements Commands {
 
     @CommandPermission("test.example")
     @CommandInfo(name = "test example")
-    public void start(CommandSender sender,Integer number) {
+    public void start(CommandSender sender, Integer number) {
 
     }
 

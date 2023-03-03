@@ -1,5 +1,6 @@
 package com.cl3t4p.commandapi;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class MainCommand extends Command {
         super(name);
         if (!permission.isEmpty())
             setPermission(permission);
-        this.message = manager.getMain_command();
+        this.message = color(manager.getMain_command());
     }
 
     public void addCommand(Command command) {
@@ -71,5 +72,9 @@ public class MainCommand extends Command {
         String[] returnArray = new String[array.length - 1];
         System.arraycopy(array, 1, returnArray, 0, array.length - 1);
         return returnArray;
+    }
+
+    protected String color(@NotNull String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 }
