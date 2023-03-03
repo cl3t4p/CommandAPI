@@ -42,18 +42,16 @@ This annotation can be used without any arguments This annotation is used to che
 
 ```java
 
-import com.cl3t4p.commandapi.Command;
+import com.cl3t4p.commandapi.Commands;
 import com.cl3t4p.commandapi.annotation.CommandInfo;
 import com.cl3t4p.commandapi.annotation.CommandPermission;
 import com.cl3t4p.commandapi.arguments.Argument;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 
+public class ExampleCommand implements Commands {
 
-public class ExampleCommand implements Command {
 
-    
     // Specifies that this method is a command handler for the "/teleport" command, 
     // with aliases "/tp" and "/tpt".
     // Requires the sender to provide 1 argument (the target's name).

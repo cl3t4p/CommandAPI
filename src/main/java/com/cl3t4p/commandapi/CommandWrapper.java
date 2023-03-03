@@ -34,6 +34,7 @@ public class CommandWrapper {
     final Object instance;
     final CommandManager manager;
     final Class<?>[] argumentsType;
+    final boolean isSuperCommand;
 
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
@@ -49,16 +50,20 @@ public class CommandWrapper {
      *             If the method is not valid to be a command.
      */
     public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandException {
-        CommandInfo info = getInfo(method);
-        this.argumentsType = method.getParameterTypes();
-        this.method = method;
-        this.required = info.required();
-        this.instance = object;
         this.manager = manager;
+        this.method = method;
+        this.argumentsType = method.getParameterTypes();
+        this.instance = object;
+
+        CommandInfo info = getInfo(method);
+
+        this.required = info.required();
 
         String name = info.name().isEmpty() ? method.getName() : info.name();
-
-        command = new Command(name) {
+        if(name.contains(" ")){
+            name = name.split(" ")[name.split(" ").length-1];
+        }
+        this.command = new Command(name) {
             @Override
             public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
                 onCommand(sender, args);
@@ -66,11 +71,21 @@ public class CommandWrapper {
             }
         };
 
-        permission = getPermission(method);
+        this.isSuperCommand = setSuperCommand(info.name());
+        this.permission = getPermission(method);
 
         if (info.alias().length != 0) {
-            command.setAliases(Arrays.asList(info.alias()));
+            this.command.setAliases(Arrays.asList(info.alias()));
         }
+    }
+
+    private boolean setSuperCommand(String name) {
+        if (name.contains(" ")) {
+            String[] array = name.split(" ");
+            manager.addMainCommand(Arrays.copyOf(array, array.length - 1), command);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -109,8 +124,9 @@ public class CommandWrapper {
         if (!CommandSender.class.isAssignableFrom(method.getParameterTypes()[0])) {
             throw new CommandException("The first arguments does not implements CommandSender");
         }
-        for (Class<?> parameterType : method.getParameterTypes()) {
-            if (!manager.getParsers().containsKey(parameterType))
+        for (int i = 1; i < method.getParameterTypes().length; i++) {
+            Class<?> parameterType = method.getParameterTypes()[i];
+            if (!CommandManager.PARSER.containsKey(parameterType))
                 throw new CommandException("The parser does not have a parser for " + parameterType.getTypeName());
         }
         return info;
