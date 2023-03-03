@@ -60,8 +60,8 @@ public class CommandWrapper {
         this.required = info.required();
 
         String name = info.name().isEmpty() ? method.getName() : info.name();
-        if(name.contains(" ")){
-            name = name.split(" ")[name.split(" ").length-1];
+        if (name.contains(" ")) {
+            name = name.split(" ")[name.split(" ").length - 1];
         }
         this.command = new Command(name) {
             @Override
