@@ -7,7 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class is used to create a main command.
@@ -22,20 +24,24 @@ public class MainCommand extends Command {
 
     private final HashMap<String, Command> commands = new HashMap<>();
     private final String message;
+    private final CommandManager manager;
 
     public MainCommand(@NotNull String name, String permission, CommandManager manager) {
         super(name);
         if (!permission.isEmpty())
             setPermission(permission);
         this.message = color(manager.getMain_command());
+        this.manager = manager;
     }
 
-    public void setPermission(String permission){
-        setPermission(permission);
+    public void setPermission(String permission) {
+        super.setPermission(permission);
     }
 
     public void addCommand(Command command) {
-        command.getNames().forEach(c -> commands.put(c.toLowerCase(),command));
+        Set<String> names = new HashSet<>(command.getAliases());
+        names.add(command.getName());
+        names.forEach(c -> commands.put(c.toLowerCase(), command));
         manager.getManager().addPermission(command.getPermission());
     }
 

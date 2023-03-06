@@ -80,12 +80,12 @@ public class CommandWrapper {
 
     private boolean setSuperCommand(String name) {
         CommandInfo info = instance.getClass().getDeclaredAnnotation(CommandInfo.class);
-        if(info != null){
-            String cmd_name = cmd_name + " " + name;
+        if (info != null) {
+            String cmd_name = info.name() + " " + name;
             String[] array = name.split(" ");
             CommandPermission permission = instance.getClass().getDeclaredAnnotation(CommandPermission.class);
             String perm = permission == null ? null : permission.value();
-            manager.addMainCommand(Arrays.copyOf(array, array.length-1), command,info,perm);
+            manager.addMainCommand(Arrays.copyOf(array, array.length - 1), command, info, perm);
             return false;
         }
         if (name.contains(" ")) {
@@ -111,7 +111,7 @@ public class CommandWrapper {
             return perm.value();
         }
         perm = instance.getClass().getDeclaredAnnotation(CommandPermission.class);
-        if(perm != null){
+        if (perm != null) {
             command.setPermission(perm.value());
             return perm.value();
         }

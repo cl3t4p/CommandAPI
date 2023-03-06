@@ -90,7 +90,7 @@ public class CommandManager {
         PARSER.put(clazz, parser);
     }
 
-    public void addMainCommand(String[] mainNames,Command command,CommandInfo info,String permission){
+    public void addMainCommand(String[] mainNames, Command command, CommandInfo info, String permission) {
         String name = mainNames[mainNames.length - 1].toLowerCase();
         MainCommand mainCommand;
         if (!mainCommands.containsKey(name)) {
@@ -99,11 +99,11 @@ public class CommandManager {
         } else {
             mainCommand = mainCommands.get(name);
         }
-        if(permission != null){
+        if (permission != null) {
             mainCommand.setPermission(permission);
         }
-        if(info != null){
-            mainCommand.setAlias(info.alias());
+        if (info != null) {
+            mainCommand.setAliases(Arrays.asList(info.alias()));
         }
 
         mainCommand.addCommand(command);
@@ -114,8 +114,7 @@ public class CommandManager {
         } else {
             manager.register(mainCommand);
         }
-        
-        
+
     }
 
     public void addMainCommand(String[] mainNames, Command command) {

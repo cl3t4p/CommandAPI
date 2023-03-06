@@ -60,7 +60,7 @@ public class CommandMapWrapper {
         if (permission != null && !permission.isEmpty()) {
             if (!perms.stream().map(Permission::getName).collect(Collectors.toSet())
                     .contains(command.getPermission())) {
-                        addPermission(permission);
+                addPermission(permission);
             }
         }
         getCommandMap().register(command.getName(), plugin.getName(), command);
@@ -74,9 +74,7 @@ public class CommandMapWrapper {
         perms.forEach(p -> Bukkit.getPluginManager().removePermission(p));
     }
 
-
-
-    public void addPermission(String permission){
+    public void addPermission(String permission) {
         Permission perm = new Permission(permission);
         Bukkit.getServer().getPluginManager().addPermission(perm);
         perms.add(perm);
