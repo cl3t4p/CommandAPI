@@ -30,8 +30,13 @@ public class MainCommand extends Command {
         this.message = color(manager.getMain_command());
     }
 
+    public void setPermission(String permission){
+        setPermission(permission);
+    }
+
     public void addCommand(Command command) {
-        commands.put(command.getName().toLowerCase(), command);
+        command.getNames().forEach(c -> commands.put(c.toLowerCase(),command));
+        manager.getManager().addPermission(command.getPermission());
     }
 
     public void addCommand(CommandWrapper command) {

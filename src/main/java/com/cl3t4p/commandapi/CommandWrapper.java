@@ -70,16 +70,24 @@ public class CommandWrapper {
                 return true;
             }
         };
-
-        this.isSuperCommand = setSuperCommand(info.name());
         this.permission = getPermission(method);
 
+        this.isSuperCommand = setSuperCommand(info.name());
         if (info.alias().length != 0) {
             this.command.setAliases(Arrays.asList(info.alias()));
         }
     }
 
     private boolean setSuperCommand(String name) {
+        CommandInfo info = instance.getClass().getDeclaredAnnotation(CommandInfo.class);
+        if(info != null){
+            String cmd_name = cmd_name + " " + name;
+            String[] array = name.split(" ");
+            CommandPermission permission = instance.getClass().getDeclaredAnnotation(CommandPermission.class);
+            String perm = permission == null ? null : permission.value();
+            manager.addMainCommand(Arrays.copyOf(array, array.length-1), command,info,perm);
+            return false;
+        }
         if (name.contains(" ")) {
             String[] array = name.split(" ");
             manager.addMainCommand(Arrays.copyOf(array, array.length - 1), command);
@@ -99,7 +107,12 @@ public class CommandWrapper {
     private String getPermission(Method method) {
         CommandPermission perm = method.getDeclaredAnnotation(CommandPermission.class);
         if (perm != null) {
-            command.setPermission(permission);
+            command.setPermission(perm.value());
+            return perm.value();
+        }
+        perm = instance.getClass().getDeclaredAnnotation(CommandPermission.class);
+        if(perm != null){
+            command.setPermission(perm.value());
             return perm.value();
         }
         return "";
