@@ -76,8 +76,10 @@ public class CommandMapWrapper {
 
     public void addPermission(String permission) {
         Permission perm = new Permission(permission);
-        Bukkit.getServer().getPluginManager().addPermission(perm);
-        perms.add(perm);
+        if(perms.contains(perm)) {
+            Bukkit.getServer().getPluginManager().addPermission(perm);
+            perms.add(perm);
+        }
     }
 
 }

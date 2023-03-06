@@ -45,10 +45,6 @@ public class MainCommand extends Command {
         manager.getManager().addPermission(command.getPermission());
     }
 
-    public void addCommand(CommandWrapper command) {
-        addCommand(command.getCommand());
-    }
-
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 0) {
