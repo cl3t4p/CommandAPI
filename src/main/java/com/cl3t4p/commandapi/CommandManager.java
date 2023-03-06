@@ -90,11 +90,38 @@ public class CommandManager {
         PARSER.put(clazz, parser);
     }
 
+    public void addMainCommand(String[] mainNames,Command command,CommandInfo info,String permission){
+        String name = mainNames[mainNames.length - 1].toLowerCase();
+        MainCommand mainCommand;
+        if (!mainCommands.containsKey(name)) {
+            mainCommand = new MainCommand(name, "", this);
+            mainCommands.put(name, mainCommand);
+        } else {
+            mainCommand = mainCommands.get(name);
+        }
+        if(permission != null){
+            mainCommand.setPermission(permission);
+        }
+        if(info != null){
+            mainCommand.setAlias(info.alias());
+        }
+
+        mainCommand.addCommand(command);
+
+        if (mainNames.length > 1) {
+            String[] subNames = Arrays.copyOfRange(mainNames, 0, mainNames.length - 1);
+            addMainCommand(subNames, mainCommand);
+        } else {
+            manager.register(mainCommand);
+        }
+        
+        
+    }
+
     public void addMainCommand(String[] mainNames, Command command) {
         String name = mainNames[mainNames.length - 1].toLowerCase();
         MainCommand mainCommand;
         if (!mainCommands.containsKey(name)) {
-            // TODO permissions
             mainCommand = new MainCommand(name, "", this);
             mainCommands.put(name, mainCommand);
         } else {
