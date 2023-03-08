@@ -82,7 +82,7 @@ public class CommandWrapper {
         CommandInfo info = instance.getClass().getDeclaredAnnotation(CommandInfo.class);
         if (info != null) {
             String cmd_name = info.name() + " " + name;
-            String[] array = name.split(" ");
+            String[] array = cmd_name.split(" ");
             CommandPermission permission = instance.getClass().getDeclaredAnnotation(CommandPermission.class);
             String perm = permission == null ? null : permission.value();
             manager.addMainCommand(Arrays.copyOf(array, array.length - 1), command, info, perm);
