@@ -55,7 +55,8 @@ public class MainCommand extends Command {
         if (command == null) {
             sender.sendMessage(message);
         } else {
-            command.execute(sender, alias, removeFirstArray(args));
+            if(command.testPermission(sender))
+                command.execute(sender, alias, removeFirstArray(args));
         }
         return true;
     }
