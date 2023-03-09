@@ -72,7 +72,7 @@ public class CommandWrapper {
         };
         this.permission = getPermission(method);
 
-        this.isSuperCommand = setSuperCommand(info.name());
+        this.isSuperCommand = setSuperCommand(command.getName());
         if (info.alias().length != 0) {
             this.command.setAliases(Arrays.asList(info.alias()));
         }
