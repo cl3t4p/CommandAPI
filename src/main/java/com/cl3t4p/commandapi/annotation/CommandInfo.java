@@ -32,4 +32,5 @@ public @interface CommandInfo {
      * Aliases of the command.
      */
     String[] alias() default {};
+
 }

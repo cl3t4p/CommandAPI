@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  *
  * @since 0.2
  */
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Msg {
     String value();

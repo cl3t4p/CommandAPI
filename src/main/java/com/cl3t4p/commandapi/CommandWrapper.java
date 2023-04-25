@@ -42,6 +42,7 @@ public class CommandWrapper {
     final CommandManager manager;
     final Class<?>[] argumentsType;
     final boolean isSuperCommand;
+    final Msg not_enough;
 
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
@@ -80,6 +81,8 @@ public class CommandWrapper {
         if (info.alias().length != 0) {
             this.command.setAliases(Arrays.asList(info.alias()));
         }
+
+        not_enough = method.getDeclaredAnnotation(Msg.class);
     }
 
     private Command createCommand(String name, Tab tab) {
@@ -205,7 +208,14 @@ public class CommandWrapper {
             return;
         }
         if (args.length < required) {
-            manager.messenger.sendRaw("cmdapi_not_enough_arg", sender);
+            if(not_enough != null){
+                if(not_enough.isKey()){
+                    manager.messenger.sendRaw(not_enough.value(), sender);
+                }else{
+                    sender.sendMessage(not_enough.value());
+                }
+            }else
+                manager.messenger.sendRaw("cmdapi_not_enough_arg", sender);
             return;
         }
 
