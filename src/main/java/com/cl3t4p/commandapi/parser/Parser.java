@@ -1,6 +1,9 @@
 package com.cl3t4p.commandapi.parser;
 
+import com.cl3t4p.commandapi.CommandManager;
+import com.cl3t4p.lib.chatlib.Messenger;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -18,113 +21,80 @@ import java.util.UUID;
  */
 public abstract class Parser<U> {
 
-    public static final Parser<Player> PLAYER = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Player not found or not online at index " + index;
-        }
+    public static final Parser<Player> PLAYER = new Parser<>("player") {
 
         @Override
         public Response<Player> parse(String[] string, int index) throws IllegalArgumentException {
             Player player = Bukkit.getPlayer(string[index]);
             if (player == null) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
             return new Response<>(player, index);
         }
     };
-    public static final Parser<UUID> UUID = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Invalid UUID at index " + index;
-        }
+    public static final Parser<UUID> UUID = new Parser<>("uuid") {
 
         @Override
         public Response<java.util.UUID> parse(String[] string, int index) throws IllegalArgumentException {
             try {
                 return new Response<>(java.util.UUID.fromString(string[index]), index);
             } catch (Exception e) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
         }
     };
-    public static final Parser<String> STRING = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "";
-        }
+    public static final Parser<String> STRING = new Parser<>("string") {
 
         @Override
         public Response<String> parse(String[] string, int index) throws IllegalArgumentException {
             return new Response<>(string[index], index);
         }
     };
-    public static final Parser<Integer> INTEGER = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Invalid Integer at index " + index;
-        }
-
+    public static final Parser<Integer> INTEGER = new Parser<>("integer") {
         @Override
         public Response<Integer> parse(String[] string, int index) throws IllegalArgumentException {
             try {
                 return new Response<>(Integer.valueOf(string[index]), index);
             } catch (Exception e) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
         }
     };
-    public static final Parser<Double> DOUBLE = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Invalid Double at index " + index;
-        }
+    public static final Parser<Double> DOUBLE = new Parser<>("double") {
 
         @Override
         public Response<Double> parse(String[] string, int index) throws IllegalArgumentException {
             try {
                 return new Response<>(Double.valueOf(string[index]), index);
             } catch (Exception e) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
         }
     };
-    public static final Parser<Float> FLOAT = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Invalid Float at index " + index;
-        }
-
+    public static final Parser<Float> FLOAT = new Parser<>("float") {
         @Override
         public Response<Float> parse(String[] string, int index) throws IllegalArgumentException {
             try {
                 return new Response<>(Float.valueOf(string[index]), index);
             } catch (Exception e) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
         }
     };
-    public static final Parser<java.net.URL> URL = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Invalid URL at index " + index;
-        }
+    public static final Parser<java.net.URL> URL = new Parser<>("url") {
 
         @Override
         public Response<java.net.URL> parse(String[] string, int index) throws IllegalArgumentException {
             try {
                 return new Response<>(new java.net.URL(string[index]), index);
             } catch (Exception e) {
-                throw new IllegalArgumentException(getMessage(index));
+                throw new IllegalArgumentException(getKey());
             }
         }
 
     };
-    public static final Parser<String[]> STRING_ARRAY = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "";
-        }
+    public static final Parser<String[]> STRING_ARRAY = new Parser<>("string_array") {
+
 
         @Override
         public Response<String[]> parse(String[] string, int index) throws IllegalArgumentException {
@@ -134,11 +104,9 @@ public abstract class Parser<U> {
             return new Response<>(returnArray, index);
         }
     };
-    public static final Parser<Vector> VECTOR = new Parser<>() {
-        @Override
-        public String getMessage(int index) {
-            return "Arguments are not a valid location";
-        }
+    public static final Parser<Vector> VECTOR = new Parser<>("location") {
+
+
 
         @Override
         public Response<Vector> parse(String[] args, int index) throws IllegalArgumentException {
@@ -149,9 +117,6 @@ public abstract class Parser<U> {
             return new Response<>(vec, index + 2);
         }
     };
-
-    public Parser() {
-    }
 
     /**
      * Default parsers
@@ -170,15 +135,38 @@ public abstract class Parser<U> {
         return map;
     }
 
+    public static void populateMessenger(Messenger messenger){
+        populateIfPresent("player","The player is not online or it does not exits",messenger);
+        populateIfPresent("string","Invalid String ???",messenger);
+        populateIfPresent("uuid","Invalid UUID",messenger);
+        populateIfPresent("integer","Invalid integer",messenger);
+        populateIfPresent("double","Invalid double",messenger);
+        populateIfPresent("float","Invalid float",messenger);
+        populateIfPresent("url","Invalid url",messenger);
+        populateIfPresent("location","Invalid location",messenger);
+        populateIfPresent("string_array","Invalid string array ???",messenger);
+
+    }
+    private static void populateIfPresent(String key,String message,Messenger messenger){
+        if(!messenger.containsKey(key)){
+            messenger.addMessage(CommandManager.MSG_PREFIX+"parser_"+key,message);
+        }
+    }
+
+    private final String key;
+    public Parser(String key) {
+        this.key = key;
+    }
+
+
     /**
-     * Message to be sent when the parser fails.
-     *
-     * @param index
-     *            index of the string that failed to parse.
+     * Key of the message to be sent
      *
      * @return the message to be sent.
      */
-    public abstract String getMessage(int index);
+    public String getKey(){
+        return CommandManager.MSG_PREFIX+"parser_"+key;
+    }
 
     public abstract Response<U> parse(String[] string, int index) throws IllegalArgumentException;
 

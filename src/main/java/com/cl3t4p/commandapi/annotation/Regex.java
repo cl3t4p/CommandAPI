@@ -6,17 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to specify if the argument had an error during the parsing.
+ * This annotation is used to mark a argument to be checked with a regex
  *
  * @author cl3t4p
  *
- * @version 0.3
+ * @version 0.7
  *
- * @since 0.2
+ * @since 0.7
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Msg {
+public @interface Regex {
     String value();
-    boolean isKey() default true;
 }

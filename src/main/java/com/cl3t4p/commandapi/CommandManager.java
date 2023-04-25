@@ -1,9 +1,9 @@
 package com.cl3t4p.commandapi;
 
+import com.cl3t4p.lib.chatlib.Messenger;
 import com.cl3t4p.commandapi.annotation.CommandInfo;
 import com.cl3t4p.commandapi.parser.Parser;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.Plugin;
 
@@ -20,6 +20,11 @@ import java.util.*;
  */
 public class CommandManager {
 
+    public static final String MSG_PREFIX = "cmdapi_";
+
+    @Getter
+    final Messenger messenger;
+
     final static HashMap<Class<?>, Parser<?>> PARSER = Parser.newMap();
 
     @Getter
@@ -29,19 +34,24 @@ public class CommandManager {
 
     final HashMap<String, MainCommand> mainCommands = new HashMap<>();
 
-    @Getter
-    @Setter
-    String not_enough = "&c> Not enough arguments!";
-    @Getter
-    @Setter
-    String wrong_type = "&c> Only %s are allowed to do this command!";
-
-    @Setter
-    @Getter
-    String main_command = "&c> This command need at least 1 argument";
 
     public CommandManager(Plugin plugin) {
+        this(plugin,new Messenger());
+    }
+
+    public CommandManager(Plugin plugin,Messenger messenger) {
+        this.messenger = messenger;
+        addMessageIfNotPresent("enough_arg","&c> Not enough arguments!");
+        addMessageIfNotPresent("wrong_sender","&c> Only %s are allowed to do this command!");
+        addMessageIfNotPresent("main_not_enough_arg","&c> This command need at least 1 argument");
+        addMessageIfNotPresent("main_wrong_subcommand","&c> This command does not exists!");
+        Parser.populateMessenger(messenger);
         this.manager = new CommandMapWrapper(plugin);
+    }
+
+    private void addMessageIfNotPresent(String key,String value){
+        if(!messenger.containsKey(key))
+            messenger.addMessage(MSG_PREFIX+key,value);
     }
 
     protected Parser.Response<?> parse(Class<?> type, String[] args, int index) throws IllegalArgumentException {

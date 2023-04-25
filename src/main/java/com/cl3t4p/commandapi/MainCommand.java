@@ -1,6 +1,6 @@
 package com.cl3t4p.commandapi;
 
-import org.bukkit.ChatColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -22,16 +22,17 @@ import java.util.Set;
  **/
 public class MainCommand extends Command {
 
-    private final HashMap<String, Command> commands = new HashMap<>();
-    private final String message;
+
     private final CommandManager manager;
+    private final HashMap<String, Command> commands = new HashMap<>();
+
 
     public MainCommand(@NotNull String name, String permission, CommandManager manager) {
         super(name);
+        this.manager = manager;
+
         if (!permission.isEmpty())
             setPermission(permission);
-        this.message = color(manager.getMain_command());
-        this.manager = manager;
     }
 
     public void setPermission(String permission) {
@@ -47,13 +48,14 @@ public class MainCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
+        //TODO Custom help message
         if (args.length == 0) {
-            sender.sendMessage(message);
+            manager.messenger.sendRaw("cmdapi_main_not_enough_arg",sender);
             return true;
         }
         Command command = commands.get(args[0].toLowerCase());
         if (command == null) {
-            sender.sendMessage(message);
+            manager.messenger.sendRaw("cmdapi_main_wrong_subcommand",sender);
         } else {
             if(command.testPermission(sender))
                 command.execute(sender, alias, removeFirstArray(args));
@@ -82,7 +84,5 @@ public class MainCommand extends Command {
         return returnArray;
     }
 
-    protected String color(@NotNull String string) {
-        return ChatColor.translateAlternateColorCodes('&', string);
-    }
+
 }
