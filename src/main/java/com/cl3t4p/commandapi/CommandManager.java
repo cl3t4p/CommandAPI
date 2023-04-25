@@ -49,8 +49,9 @@ public class CommandManager {
     }
 
     private void addMessageIfNotPresent(String key, String value) {
-        if (!messenger.containsKey(key))
-            messenger.addMessage(MSG_PREFIX + key, value);
+        String final_key = MSG_PREFIX + key;
+        if (!messenger.containsKey(final_key))
+            messenger.addMessage(final_key, value);
     }
 
     protected Parser.Response<?> parse(Class<?> type, String[] args, int index) throws IllegalArgumentException {
