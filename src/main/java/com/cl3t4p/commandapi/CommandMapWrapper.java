@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @author cl3t4p
  *
- * @version 0.3
+ * @version 0.7
  *
  * @since 0.2
  */
@@ -76,7 +76,7 @@ public class CommandMapWrapper {
 
     public void addPermission(String permission) {
         Permission perm = new Permission(permission);
-        if(perms.contains(perm)) {
+        if (perms.contains(perm)) {
             Bukkit.getServer().getPluginManager().addPermission(perm);
             perms.add(perm);
         }

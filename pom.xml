@@ -6,7 +6,7 @@
 
     <groupId>com.cl3t4p</groupId>
     <artifactId>commandapi</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,12 +80,5 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub cl3t4p Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/cl3t4p/CommandAPI</url>
-        </repository>
-    </distributionManagement>
 
 </project>

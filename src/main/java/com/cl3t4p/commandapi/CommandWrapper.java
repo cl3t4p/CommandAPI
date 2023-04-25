@@ -26,7 +26,9 @@ import java.util.Map;
  * This class is used to wrap a method as a command.
  *
  * @author cl3t4p
- * @version 0.3
+ *
+ * @version 0.7
+ *
  * @since 0.2
  */
 @Getter
@@ -44,10 +46,15 @@ public class CommandWrapper {
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
      *
-     * @param method  The method to get the annotation from.
-     * @param object  The object that contains the method.
-     * @param manager The {@link CommandManager} that will manage the command.
-     * @throws CommandException If the method is not valid to be a command.
+     * @param method
+     *            The method to get the annotation from.
+     * @param object
+     *            The object that contains the method.
+     * @param manager
+     *            The {@link CommandManager} that will manage the command.
+     *
+     * @throws CommandException
+     *             If the method is not valid to be a command.
      */
     public CommandWrapper(Method method, Object object, CommandManager manager) throws CommandException {
         this.manager = manager;
@@ -56,7 +63,6 @@ public class CommandWrapper {
         this.instance = object;
 
         CommandInfo info = getInfo(method);
-
 
         this.required = info.required();
 
@@ -85,12 +91,12 @@ public class CommandWrapper {
                     return true;
                 }
             };
-        }else {
+        } else {
             TabCompleter completer = null;
             if (tab.isMethod()) {
                 try {
-                    completer =
-                            new MethodCompleter(instance.getClass().getMethod(tab.value(), CommandSender.class, String[].class), instance);
+                    completer = new MethodCompleter(
+                            instance.getClass().getMethod(tab.value(), CommandSender.class, String[].class), instance);
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                     Bukkit.getLogger().info("No tab method with name " + tab.value());
@@ -109,7 +115,8 @@ public class CommandWrapper {
 
                 @NotNull
                 @Override
-                public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+                public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias,
+                        @NotNull String[] args) throws IllegalArgumentException {
                     assert finalCompleter != null;
                     return finalCompleter.onComplete(sender, args);
                 }
@@ -138,7 +145,9 @@ public class CommandWrapper {
     /**
      * This method is used to get the {@link CommandPermission} annotation of a method.
      *
-     * @param method The method to get the annotation from.
+     * @param method
+     *            The method to get the annotation from.
+     *
      * @return The permission of the command.
      */
     private String getPermission(Method method) {
@@ -158,9 +167,13 @@ public class CommandWrapper {
     /**
      * This method is used to get the {@link CommandInfo} annotation of a method.
      *
-     * @param method The method to get the annotation from.
+     * @param method
+     *            The method to get the annotation from.
+     *
      * @return The {@link CommandInfo} annotation of the method.
-     * @throws CommandException If the method is not valid to be a command.
+     *
+     * @throws CommandException
+     *             If the method is not valid to be a command.
      */
     private CommandInfo getInfo(Method method) throws CommandException {
         CommandInfo info = method.getDeclaredAnnotation(CommandInfo.class);
@@ -181,16 +194,18 @@ public class CommandWrapper {
     /**
      * This method is used to execute the command.
      *
-     * @param sender The sender of the command.
-     * @param args   The arguments of the command.
+     * @param sender
+     *            The sender of the command.
+     * @param args
+     *            The arguments of the command.
      */
     public void onCommand(CommandSender sender, String[] args) {
         if (!argumentsType[0].isInstance(sender)) {
-            manager.messenger.sendRaw("cmdapi_wrong_sender",sender);
+            manager.messenger.sendRaw("cmdapi_wrong_sender", sender);
             return;
         }
         if (args.length < required) {
-            manager.messenger.sendRaw("cmdapi_not_enough_arg",sender);
+            manager.messenger.sendRaw("cmdapi_not_enough_arg", sender);
             return;
         }
 
@@ -209,13 +224,13 @@ public class CommandWrapper {
             } catch (IllegalArgumentException e) {
                 Msg msg = method.getParameters()[i + 1].getDeclaredAnnotation(Msg.class);
                 if (msg != null) {
-                    if(msg.isKey()){
-                        manager.messenger.sendRaw(msg.value(),sender, Map.of("index",String.valueOf(i)));
-                    }else{
+                    if (msg.isKey()) {
+                        manager.messenger.sendRaw(msg.value(), sender, Map.of("index", String.valueOf(i)));
+                    } else {
                         sender.sendMessage(Messenger.color(msg.value()));
                     }
-                }else{
-                    manager.messenger.sendRaw(e.getMessage(),sender, Map.of("index",String.valueOf(i)));
+                } else {
+                    manager.messenger.sendRaw(e.getMessage(), sender, Map.of("index", String.valueOf(i)));
                 }
                 return;
             }

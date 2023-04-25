@@ -15,7 +15,7 @@ import java.util.UUID;
  *
  * @author cl3t4p
  *
- * @version 0.3
+ * @version 0.7
  *
  * @since 0.2
  */
@@ -95,7 +95,6 @@ public abstract class Parser<U> {
     };
     public static final Parser<String[]> STRING_ARRAY = new Parser<>("string_array") {
 
-
         @Override
         public Response<String[]> parse(String[] string, int index) throws IllegalArgumentException {
             String[] returnArray = new String[string.length - index];
@@ -105,8 +104,6 @@ public abstract class Parser<U> {
         }
     };
     public static final Parser<Vector> VECTOR = new Parser<>("location") {
-
-
 
         @Override
         public Response<Vector> parse(String[] args, int index) throws IllegalArgumentException {
@@ -135,37 +132,38 @@ public abstract class Parser<U> {
         return map;
     }
 
-    public static void populateMessenger(Messenger messenger){
-        populateIfPresent("player","The player is not online or it does not exits",messenger);
-        populateIfPresent("string","Invalid String ???",messenger);
-        populateIfPresent("uuid","Invalid UUID",messenger);
-        populateIfPresent("integer","Invalid integer",messenger);
-        populateIfPresent("double","Invalid double",messenger);
-        populateIfPresent("float","Invalid float",messenger);
-        populateIfPresent("url","Invalid url",messenger);
-        populateIfPresent("location","Invalid location",messenger);
-        populateIfPresent("string_array","Invalid string array ???",messenger);
+    public static void populateMessenger(Messenger messenger) {
+        populateIfPresent("player", "The player is not online or it does not exits", messenger);
+        populateIfPresent("string", "Invalid String ???", messenger);
+        populateIfPresent("uuid", "Invalid UUID", messenger);
+        populateIfPresent("integer", "Invalid integer", messenger);
+        populateIfPresent("double", "Invalid double", messenger);
+        populateIfPresent("float", "Invalid float", messenger);
+        populateIfPresent("url", "Invalid url", messenger);
+        populateIfPresent("location", "Invalid location", messenger);
+        populateIfPresent("string_array", "Invalid string array ???", messenger);
 
     }
-    private static void populateIfPresent(String key,String message,Messenger messenger){
-        if(!messenger.containsKey(key)){
-            messenger.addMessage(CommandManager.MSG_PREFIX+"parser_"+key,message);
+
+    private static void populateIfPresent(String key, String message, Messenger messenger) {
+        if (!messenger.containsKey(key)) {
+            messenger.addMessage(CommandManager.MSG_PREFIX + "parser_" + key, message);
         }
     }
 
     private final String key;
+
     public Parser(String key) {
         this.key = key;
     }
-
 
     /**
      * Key of the message to be sent
      *
      * @return the message to be sent.
      */
-    public String getKey(){
-        return CommandManager.MSG_PREFIX+"parser_"+key;
+    public String getKey() {
+        return CommandManager.MSG_PREFIX + "parser_" + key;
     }
 
     public abstract Response<U> parse(String[] string, int index) throws IllegalArgumentException;

@@ -1,6 +1,5 @@
 package com.cl3t4p.commandapi;
 
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -16,16 +15,14 @@ import java.util.Set;
  *
  * @author cl3t4p
  *
- * @version 0.3
+ * @version 0.7
  *
  * @since 0.2
  **/
 public class MainCommand extends Command {
 
-
     private final CommandManager manager;
     private final HashMap<String, Command> commands = new HashMap<>();
-
 
     public MainCommand(@NotNull String name, String permission, CommandManager manager) {
         super(name);
@@ -48,16 +45,16 @@ public class MainCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
-        //TODO Custom help message
+        // TODO Custom help message
         if (args.length == 0) {
-            manager.messenger.sendRaw("cmdapi_main_not_enough_arg",sender);
+            manager.messenger.sendRaw("cmdapi_main_not_enough_arg", sender);
             return true;
         }
         Command command = commands.get(args[0].toLowerCase());
         if (command == null) {
-            manager.messenger.sendRaw("cmdapi_main_wrong_subcommand",sender);
+            manager.messenger.sendRaw("cmdapi_main_wrong_subcommand", sender);
         } else {
-            if(command.testPermission(sender))
+            if (command.testPermission(sender))
                 command.execute(sender, alias, removeFirstArray(args));
         }
         return true;
@@ -83,6 +80,5 @@ public class MainCommand extends Command {
         System.arraycopy(array, 1, returnArray, 0, array.length - 1);
         return returnArray;
     }
-
 
 }

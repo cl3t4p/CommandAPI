@@ -18,5 +18,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Tab {
     String value();
+
     boolean isMethod() default false;
 }

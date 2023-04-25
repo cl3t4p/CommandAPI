@@ -18,5 +18,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Msg {
     String value();
+
     boolean isKey() default true;
 }
