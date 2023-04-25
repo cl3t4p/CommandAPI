@@ -40,7 +40,7 @@ public class CommandManager {
 
     public CommandManager(Plugin plugin, Messenger messenger) {
         this.messenger = messenger;
-        addMessageIfNotPresent("enough_arg", "&c> Not enough arguments!");
+        addMessageIfNotPresent("not_enough_arg", "&c> Not enough arguments!");
         addMessageIfNotPresent("wrong_sender", "&c> Only %s are allowed to do this command!");
         addMessageIfNotPresent("main_not_enough_arg", "&c> This command need at least 1 argument");
         addMessageIfNotPresent("main_wrong_subcommand", "&c> This command does not exists!");

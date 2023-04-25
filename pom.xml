@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.cl3t4p</groupId>
-    <artifactId>commandapi</artifactId>
+    <artifactId>CommandAPI</artifactId>
     <version>0.7</version>
 
     <properties>
