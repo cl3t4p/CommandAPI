@@ -146,8 +146,9 @@ public abstract class Parser<U> {
     }
 
     private static void populateIfPresent(String key, String message, Messenger messenger) {
-        if (!messenger.containsKey(key)) {
-            messenger.addMessage(CommandManager.MSG_PREFIX + "parser_" + key, message);
+        String final_key = CommandManager.MSG_PREFIX + "parser_" + key;
+        if (!messenger.containsKey(final_key)) {
+            messenger.addMessage(final_key, message);
         }
     }
 
